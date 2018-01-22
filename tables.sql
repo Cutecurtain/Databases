@@ -51,7 +51,7 @@ CREATE TABLE Course (
 --Prerequisite(_course_, _prerequisite_)
 CREATE TABLE Prerequisite (
 	course			Course,
-	prerequisite	Prerequisite,
+	prerequisite	TEXT,
 	PRIMARY KEY(course, prerequisite)
 );
 
