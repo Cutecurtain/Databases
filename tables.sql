@@ -47,7 +47,7 @@ CREATE TABLE Branch (
 --	(branch, program) -> Branch.(name, program)
 CREATE TABLE BelongsTo (-------------------------------------------------
 	student			TEXT		PRIMARY KEY,
-	branch			TEXT		NOT NULL,
+	branch			TEXT,
 	program			TEXT		NOT NULL,
 	FOREIGN KEY(student)			REFERENCES Student(ssn),
 	FOREIGN KEY(branch, program)	REFERENCES Branch(name, program)
@@ -132,7 +132,7 @@ CREATE TABLE Registered (
 CREATE TABLE Taken (
 	student			TEXT,
 	course			CHAR(6),
-	grade			INT			NOT NULL,
+	grade			CHAR(1)		NOT NULL,
 	PRIMARY KEY(student, course)
 );
 
