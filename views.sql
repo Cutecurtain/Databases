@@ -2,7 +2,7 @@
 -- the program and the branch (if any) they are following. The branch 
 --column is the only column in any of the views that is allowed to be NULLABLE.
 CREATE VIEW StudentsFollowing AS 
-	SELECT ssn AS student,program,branch 
+	SELECT student,program,branch 
 	FROM BelongsTo;
 
 --View: FinishedCourses(student, course, grade, credits)
@@ -21,10 +21,10 @@ CREATE VIEW FinishedCourses AS
 
 CREATE VIEW Registrations AS
 	(SELECT student,course,'waiting' AS status
-			FROM WaitingList)
+	FROM WaitingList)
 		UNION
 	(SELECT student,course,'registered' AS status
-			FROM Registered);
+	FROM Registered);
 
 
 --View: PassedCourses(student, course, credits) For all students, all passed 
@@ -43,6 +43,5 @@ CREATE VIEW PassedCourses AS
 --helper view towards the PathToGraduation view, and will not be directly used 
 --by your application.
 
-CREATE VIEW UnreadMandatory AS
-	SELECT student,course
-	FROM 
+--CREATE VIEW UnreadMandatory AS
+--	SELECT student,course;
