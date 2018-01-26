@@ -28,8 +28,8 @@ CREATE TABLE Hosts (
 CREATE TABLE Student (
 	ssn				TEXT		PRIMARY KEY,
 	name			TEXT		NOT NULL,
-	login			TEXT		UNIQUE		NOT NULL,
-	program			TEXT		REFERENCES Program(name),
+	login			TEXT		NOT NULL UNIQUE,
+	program			TEXT		NOT NULL REFERENCES Program(name),
 	UNIQUE(ssn, program)
 );
 
@@ -45,12 +45,13 @@ CREATE TABLE Branch (
 --	student -> Student.ssn
 --	(student, program) -> Student.(ssn, program)
 --	(branch, program) -> Branch.(name, program)
-CREATE TABLE BelongsTo (-------------------------------------------------
-	student			TEXT			PRIMARY KEY,
+CREATE TABLE BelongsTo (
+	student			TEXT			REFERENCES Student(ssn),
 	branch			TEXT,
 	program			TEXT			NOT NULL,
-	FOREIGN KEY(student)			REFERENCES Student(ssn),
-	FOREIGN KEY(branch, program)	REFERENCES Branch(name, program)
+	FOREIGN KEY(student, program)	REFERENCES Student(ssn, program),
+	FOREIGN KEY(branch, program)	REFERENCES Branch(name, program),
+	PRIMARY KEY(student)
 );
 
 --Course(_code_, name, credits, department)
