@@ -28,6 +28,15 @@ INSERT INTO Course VALUES('DEF456', 'Gamling', 7.5, 'Data IT & Elektro');
 INSERT INTO Course VALUES('asdfgh', 'Frukt', 7.5, 'ALLA ANDRA');
 INSERT INTO Course VALUES('zxcvbn', 'Grönsak', 7.5, 'ALLA ANDRA');
 
+INSERT INTO Classification VALUES('math');
+INSERT INTO Classification VALUES('research');
+INSERT INTO Classification VALUES('seminar');
+
+INSERT INTO Classified VALUES('ABC123', 'math');
+INSERT INTO Classified VALUES('DEF456', 'math');
+INSERT INTO Classified VALUES('asdfgh', 'research');
+INSERT INTO Classified VALUES('zxcvbn', 'seminar');
+
 INSERT INTO MandatoryProgram VALUES('ABC123', 'Informationsteknik');
 INSERT INTO MandatoryProgram VALUES('DEF456', 'Datateknik');
 INSERT INTO MandatoryProgram VALUES('asdfgh', 'ALLA ANDRA');
