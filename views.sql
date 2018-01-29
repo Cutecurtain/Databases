@@ -43,5 +43,15 @@ CREATE VIEW PassedCourses AS
 --helper view towards the PathToGraduation view, and will not be directly used 
 --by your application.
 
---CREATE VIEW UnreadMandatory AS
---	SELECT student,course;
+CREATE VIEW UnreadMandatory AS
+	((SELECT s.ssn AS student, mp.course
+	FROM Student s, MandatoryProgram mp
+	WHERE s.program = mp.program)
+		UNION
+	(SELECT bt.student AS student, mb.course
+	FROM BelongsTo bt, MandatoryBranch mb
+	WHERE bt.branch = mb.branch))
+		EXCEPT
+	(SELECT student, course
+	FROM PassedCourses);
+

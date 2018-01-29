@@ -59,8 +59,9 @@ CREATE TABLE BelongsTo (
 CREATE TABLE Course (
 	code			CHAR(6)		PRIMARY KEY,
 	name			TEXT		NOT NULL,
-	credits			TEXT		NOT NULL,
-	department		TEXT		REFERENCES Department(name)
+	credits			FLOAT		NOT NULL,
+	department		TEXT		NOT NULL REFERENCES Department(name),
+	CHECK(credits > 0)
 );
 
 --Prerequisite(_course_, _prerequisite_)
@@ -69,7 +70,8 @@ CREATE TABLE Course (
 CREATE TABLE Prerequisite (
 	course			CHAR(6)		REFERENCES Course(code),
 	prerequisite	CHAR(6)		REFERENCES Course(code),
-	PRIMARY KEY(course, prerequisite)
+	PRIMARY KEY(course, prerequisite),
+	CHECK(course != prerequisite)
 );
 
 --Classification(_name_)
@@ -83,7 +85,7 @@ CREATE TABLE Classification (
 --	classification -> Classification.name
 CREATE TABLE Classified (
 	course			CHAR(6)		REFERENCES Course(code),
-	classification	TEXT		REFERENCES Classification(name),
+	classification	TEXT		NOT NULL REFERENCES Classification(name),
 	PRIMARY KEY(course, classification)
 );
 
@@ -134,7 +136,8 @@ CREATE TABLE Taken (
 	student			TEXT		REFERENCES Student(ssn),
 	course			CHAR(6)		REFERENCES Course(code),
 	grade			CHAR(1)		NOT NULL,
-	PRIMARY KEY(student, course)
+	PRIMARY KEY(student, course),
+	CHECK(grade = 'U' OR (grade >= '3' AND grade <= '5'))
 );
 
 --LimitedCourse(_code_, seats)
@@ -142,7 +145,8 @@ CREATE TABLE Taken (
 CREATE TABLE LimitedCourse (
 	code			CHAR(6)		REFERENCES Course(code),
 	seats			INT			NOT NULL,
-	PRIMARY KEY(code)
+	PRIMARY KEY(code),
+	CHECK(seats > 0)
 );
 
 --WaitingList(_student_, _course_, position)
@@ -152,7 +156,8 @@ CREATE TABLE LimitedCourse (
 CREATE TABLE WaitingList (
 	student			TEXT		REFERENCES Student(ssn),
 	course			CHAR(6)		REFERENCES LimitedCourse(code),
-	position		TEXT		NOT NULL,
+	position		INT			NOT NULL,
 	PRIMARY KEY(student, course),
-	UNIQUE(position, course)
+	UNIQUE(position, course),
+	CHECK(position > 0)
 );
