@@ -51,50 +51,110 @@ CREATE VIEW UnreadMandatory AS
 	(SELECT student, course
 	FROM PassedCourses);
 
---Returns the amount of mandatory courses left for each student.
-CREATE VIEW MandatoryLeft AS
+--Returns the students who have mandatory courses left.
+CREATE VIEW StudentsWithMandatory AS
 	SELECT student, COUNT(course) AS mandatoryLeft
 	FROM UnreadMandatory
+	GROUP BY student;
+	
+--Returns the amount of mandatory courses left for each student.
+CREATE VIEW MandatoryLeft AS
+	(SELECT student, mandatoryLeft FROM StudentsWithMandatory)
+		UNION
+	(SELECT ssn AS student, 0 AS mandatoryLeft
+	FROM Student
+	WHERE ssn NOT IN(SELECT student FROM StudentsWithMandatory));
+
+--Returns the students who have not passed any course.
+CREATE VIEW NotPassedAny AS
+	SELECT ssn AS student
+	FROM Student
+	WHERE ssn NOT IN(SELECT student FROM PassedCourses)
 	GROUP BY student;
 
 --Returns the total amount of credits for each student.
 CREATE VIEW TotalCredits AS
-	SELECT student, SUM(credits) as credits
+	(SELECT student, SUM(credits) as credits
 	FROM PassedCourses
+	GROUP BY student)
+		UNION
+	(SELECT student, 0 AS credits
+	FROM NotPassedAny);
+
+--Returns the students who has math credits.
+CREATE VIEW PassedMath AS
+	SELECT student, SUM(credits) as credits
+	FROM PassedCourses 
+	WHERE course in (	SELECT course FROM Classified 
+						WHERE classification = 'math')
 	GROUP BY student;
 
 --Returns the total math credits for each student.
 CREATE VIEW MathCredits AS
-	SELECT student, SUM(credits) as credits
+	(SELECT student, credits FROM PassedMath)
+		UNION
+	(SELECT ssn AS student, 0 AS credits
+	FROM Student
+	WHERE ssn NOT IN(SELECT student FROM PassedMath));
+
+---Returns the students who has research credits.
+CREATE VIEW PassedResearch AS
+	(SELECT student, SUM(credits) as credits
 	FROM PassedCourses 
-	WHERE course in (SELECT course FROM Classified WHERE classification = 'math')
-	GROUP BY student;
+	WHERE course in (	SELECT course FROM Classified
+						WHERE classification = 'research')
+	GROUP BY student);
 
 --Returns the total research credits for each student.
 CREATE VIEW ResearchCredits AS
-	SELECT student, SUM(credits) as credits
-	FROM PassedCourses 
-	WHERE course in (SELECT course FROM Classified WHERE classification = 'research')
-	GROUP BY student;
+	(SELECT student, credits FROM PassedResearch)
+		UNION
+	(SELECT ssn AS student, 0 AS credits
+	FROM Student
+	WHERE ssn NOT IN(SELECT student FROM PassedResearch));
+
+--Returns the students who has taken at least one seminar course.
+CREATE VIEW PassedSeminar AS
+	(SELECT student, count(course) AS courses
+	FROM PassedCourses
+	WHERE course in (	SELECT course FROM Classified
+						WHERE classification = 'seminar')
+	GROUP BY student);
 
 --Returns the amount of seminar courses read for each student.
 CREATE VIEW SeminarCoursesRead AS
-	SELECT student, count(course) AS courses
-	FROM PassedCourses
-	WHERE course in (SELECT course FROM Classified WHERE classification = 'seminar')
-	GROUP BY student;
+	(SELECT student, courses FROM PassedSeminar)
+		UNION
+	(SELECT ssn as student, 0 as courses
+	FROM Student
+	WHERE ssn NOT IN(SELECT student FROM PassedSeminar));
+
+--Returns the student who has recommended credits.
+CREATE VIEW PassedRecommended AS
+	SELECT pc.student, SUM(pc.credits) AS credits
+	FROM BelongsTo bt, RecommendedBranch rb, PassedCourses pc
+	WHERE bt.branch = rb.branch AND rb.course = pc.course AND bt.student = pc.student
+	GROUP BY pc.student;
+	
+--Returns the total recommended credits for each student.
+CREATE VIEW RecommendedCredits AS
+	(SELECT student, credits FROM PassedRecommended)
+		UNION
+	(SELECT ssn AS student, 0 AS credits
+	FROM Student
+	WHERE ssn NOT IN(SELECT student FROM PassedRecommended));
 
 --Return the status of being able to graduate for each student.
 CREATE VIEW GraduationStatus AS
 	(SELECT ml.student, TRUE AS status
-	FROM MandatoryLeft ml, TotalCredits tc, MathCredits mc, ResearchCredits rc, SeminarCoursesRead sc
-	WHERE ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student
-	AND ml.mandatoryLeft = 0 AND tc.credits >= 90 AND mc.credits >= 30 AND rc.credits >= 7.5 AND sc.courses >= 1)
+	FROM BelongsTo bt, MandatoryLeft ml, TotalCredits tc, MathCredits mc, ResearchCredits rc, SeminarCoursesRead sc, RecommendedCredits recm
+	WHERE ml.student = bt.student AND ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student AND ml.student = recm.student
+	AND bt.branch IS NOT NULL AND ml.mandatoryLeft = 0 AND tc.credits >= 0 AND mc.credits >= 20 AND rc.credits >= 10 AND sc.courses >= 1 AND recm.credits >= 10)
 		UNION
 	(SELECT ml.student, FALSE AS status
-	FROM MandatoryLeft ml, TotalCredits tc, MathCredits mc, ResearchCredits rc, SeminarCoursesRead sc
-	WHERE ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student
-	AND (ml.mandatoryLeft > 0 OR tc.credits < 90 OR mc.credits < 30 OR rc.credits < 7.5 OR sc.courses < 1));
+	FROM BelongsTo bt, MandatoryLeft ml, TotalCredits tc, MathCredits mc, ResearchCredits rc, SeminarCoursesRead sc, RecommendedCredits recm
+	WHERE ml.student = bt.student AND ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student AND ml.student = recm.student
+	AND (bt.branch IS NULL OR ml.mandatoryLeft > 0 OR tc.credits < 0 OR mc.credits < 20 OR rc.credits < 10 OR sc.courses < 1 OR recm.credits < 10));
 	
 
 --View: PathToGraduation(student, totalCredits, mandatoryLeft, mathCredits, researchCredits, seminarCourses, status) 
