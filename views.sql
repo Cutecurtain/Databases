@@ -2,8 +2,12 @@
 -- the program and the branch (if any) they are following. The branch 
 --column is the only column in any of the views that is allowed to be NULLABLE.
 CREATE VIEW StudentsFollowing AS 
-	SELECT student,program,branch 
-	FROM BelongsTo;
+	(SELECT student, program, branch
+	FROM BelongsTo)
+		UNION
+	(SELECT ssn AS student, program, NULL AS branch 
+	FROM Student
+	WHERE ssn NOT IN(SELECT student FROM BelongsTo));
 
 --View: FinishedCourses(student, course, grade, credits)
 --For all students, all finished courses, along with their codes,
@@ -147,14 +151,14 @@ CREATE VIEW RecommendedCredits AS
 --Return the status of being able to graduate for each student.
 CREATE VIEW GraduationStatus AS
 	(SELECT ml.student, TRUE AS status
-	FROM BelongsTo bt, MandatoryLeft ml, TotalCredits tc, MathCredits mc, ResearchCredits rc, SeminarCoursesRead sc, RecommendedCredits recm
-	WHERE ml.student = bt.student AND ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student AND ml.student = recm.student
-	AND bt.branch IS NOT NULL AND ml.mandatoryLeft = 0 AND tc.credits >= 0 AND mc.credits >= 20 AND rc.credits >= 10 AND sc.courses >= 1 AND recm.credits >= 10)
+	FROM StudentsFollowing sf, MandatoryLeft ml, TotalCredits tc, MathCredits mc, ResearchCredits rc, SeminarCoursesRead sc, RecommendedCredits recm
+	WHERE ml.student = sf.student AND ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student AND ml.student = recm.student
+	AND sf.branch IS NOT NULL AND ml.mandatoryLeft = 0 AND tc.credits >= 0 AND mc.credits >= 20 AND rc.credits >= 10 AND sc.courses >= 1 AND recm.credits >= 10)
 		UNION
 	(SELECT ml.student, FALSE AS status
-	FROM BelongsTo bt, MandatoryLeft ml, TotalCredits tc, MathCredits mc, ResearchCredits rc, SeminarCoursesRead sc, RecommendedCredits recm
-	WHERE ml.student = bt.student AND ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student AND ml.student = recm.student
-	AND (bt.branch IS NULL OR ml.mandatoryLeft > 0 OR tc.credits < 0 OR mc.credits < 20 OR rc.credits < 10 OR sc.courses < 1 OR recm.credits < 10));
+	FROM StudentsFollowing sf, MandatoryLeft ml, TotalCredits tc, MathCredits mc, ResearchCredits rc, SeminarCoursesRead sc, RecommendedCredits recm
+	WHERE ml.student = sf.student AND ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student AND ml.student = recm.student
+	AND (sf.branch IS NULL OR ml.mandatoryLeft > 0 OR tc.credits < 0 OR mc.credits < 20 OR rc.credits < 10 OR sc.courses < 1 OR recm.credits < 10));
 	
 
 --View: PathToGraduation(student, totalCredits, mandatoryLeft, mathCredits, researchCredits, seminarCourses, status) 

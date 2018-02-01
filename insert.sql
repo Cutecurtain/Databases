@@ -5,6 +5,10 @@ INSERT INTO Program VALUES('ALLA ANDRA', 'NOOB');
 INSERT INTO Department VALUES('Data IT & Elektro', 'EDIT');
 INSERT INTO Department VALUES('ALLA ANDRA', 'NOOB');
 
+INSERT INTO Hosts VALUES('Data IT & Elektro', 'Informationsteknik');
+INSERT INTO Hosts VALUES('Data IT & Elektro', 'Datateknik');
+INSERT INTO Hosts VALUES('ALLA ANDRA', 'ALLA ANDRA');
+
 INSERT INTO Student VALUES('1', 'a', '1a', 'Informationsteknik');
 INSERT INTO Student VALUES('2', 'b', '2b', 'Informationsteknik');
 INSERT INTO Student VALUES('3', 'c', '3c', 'Datateknik');
@@ -17,10 +21,8 @@ INSERT INTO Branch VALUES('Briber', 'Datateknik');
 INSERT INTO Branch VALUES('ULTRA', 'ALLA ANDRA');
 
 INSERT INTO BelongsTo VALUES('1', 'Cyber', 'Informationsteknik');
-INSERT INTO BelongsTo VALUES('2', NULL, 'Informationsteknik');
-INSERT INTO BelongsTo VALUES('3', NULL, 'Datateknik');
-INSERT INTO BelongsTo VALUES('4', 'Briber', 'Datateknik');
-INSERT INTO BelongsTo VALUES('5', NULL, 'ALLA ANDRA');
+INSERT INTO BelongsTo VALUES('3', 'Briber', 'Datateknik');
+INSERT INTO BelongsTo VALUES('5', 'ULTRA', 'ALLA ANDRA');
 INSERT INTO BelongsTo VALUES('6', 'ULTRA', 'ALLA ANDRA');
 
 INSERT INTO Course VALUES('ABC123', 'Databases', 10, 'Data IT & Elektro');

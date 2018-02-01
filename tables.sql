@@ -47,7 +47,7 @@ CREATE TABLE Branch (
 --	(branch, program) -> Branch.(name, program)
 CREATE TABLE BelongsTo (
 	student			TEXT			REFERENCES Student(ssn),
-	branch			TEXT,
+	branch			TEXT			NOT NULL,
 	program			TEXT			NOT NULL,
 	FOREIGN KEY(student, program)	REFERENCES Student(ssn, program),
 	FOREIGN KEY(branch, program)	REFERENCES Branch(name, program),
