@@ -6,7 +6,9 @@ WEAK ENTITY Branch Program BranchOf : _name_
 
 ENTITY Student : _ssn_ name login
 RELATIONSHIP StudentOf Student -) Program
-RELATIONSHIP BelongsTo Student -) Branch
+
+WEAK ENTITY BelongsTo Student InBranch
+RELATIONSHIP ToBranch BelongsTo -- Branch
 
 ENTITY Course : _code_ name credits
 RELATIONSHIP CourseOf Course -) Department
