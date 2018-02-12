@@ -1,0 +1,56 @@
+Domain(
+	 	departmentName,
+	 	departmentAbr,
+	 	programName,
+	 	programAbr,
+	 	branchName,
+		mandatoryBranch,
+		mandatoryProgram,
+		recommendedBranch,
+	 	_ssn_,
+	 	studentName,
+	 	login,
+	 	_code_,
+	 	coursename,
+	 	credits,
+	 	seats,
+        prerequisite,
+	 	position,
+	 	grade,
+ 		_classificationName_
+ )
+
+potential keys: (ssn, code, classificationName), (login, code, classificationName)
+Both ssn and login is unique values of a student.
+A student can have only one relation to a course.
+code is the only unique value of the course.
+a course can have zero or more classifications.
+Thus the only keys are a tuple of code, classificationName and ssn or login.
+BCNF violations: every dependency above except the keys
+
+Functional dependencies:
+departmentName -> departmentAbr
+departmentAbr -> departmentName
+programName -> programAbr
+programName -> departmentName
+programName -> mandatoryProgram
+(branchName,programName) -> mandatoryBranch
+(branchName,programName) -> recommendedBranch
+ssn -> studentName 
+ssn -> login 
+ssn -> programName 
+ssn -> branchName
+login -> studentName 
+login -> ssn
+login -> programName 
+login -> branchName
+code -> coursename
+code -> credits
+code -> seats
+code -> prerequisite
+code -> classificationName
+code -> departmentName
+(code,ssn) -> position
+(code,ssn) -> grade
+(code,login) -> position
+(code,login) -> grade
