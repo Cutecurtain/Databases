@@ -1,0 +1,33 @@
+ENTITY Department : _name_ _abr_
+ENTITY Program : _name_ abr
+RELATIONSHIP Host Department -- Program
+
+WEAK ENTITY Branch Program BranchOf : _name_
+
+ENTITY Student : _ssn_ name login
+RELATIONSHIP StudentOf Student -) Program
+RELATIONSHIP BelongsTo Student -) Branch
+
+ENTITY Course : _code_ name credits
+RELATIONSHIP CourseOf Course -) Department
+ENTITY LimitedCourse : seats
+ISA LimitedCourse Course
+
+RELATIONSHIP MandatoryProgram Program -- Course
+RELATIONSHIP MandatoryBranch Branch -- Course
+RELATIONSHIP RecommendedBranch Branch -- Course
+
+ENTITY Classification : _name_
+RELATIONSHIP Classified Course -- Classification
+
+RELATIONSHIP Registered Student -- Course
+
+ENTITY Taken : grade
+RELATIONSHIP HasTaken Taken -- Student
+RELATIONSHIP TakenCourse Taken -- Course
+
+ENTITY WaitingList : position
+RELATIONSHIP InLine WaitingList -- Student
+RELATIONSHIP ForCourse WaitingList -- Course
+
+RELATIONSHIP Prerequisite Course -- Course
