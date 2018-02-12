@@ -1,0 +1,35 @@
+-- create table Domain(
+--	 	departmentName,
+--	 	departmentAbr,
+--	 	programName,
+--	 	programAbr,
+--	 	branchName,
+--	 	_ssn_,
+--	 	studentName,
+--	 	login,
+--	 	code,
+--	 	coursename,
+--	 	credits,
+--	 	seats,
+--	 	position,
+--	 	grade,
+-- 		classificationName
+-- );
+-- FD: (departmentName, departmentAbr) -> Department(name, abr)
+-- FD: programName -> Program.name
+-- FD: programAbr -> Program.abr
+-- FD: (branchName, programName) -> Branch(name, program)
+-- FD: (ssn, programName) -> Student(ssn, program)
+-- FD: studentName -> Student.name
+-- FD: login -> Student.login
+-- FD: code -> Course.code
+-- FD: courseName -> Course.name
+-- FD: credits -> Course.credits
+-- FD: code -> LimitedCourse.code
+-- FD: seats -> LimitedCourse.seats
+-- FD: (ssn, code) -> WaitingList(student, course)
+-- FD: position -> WaitingList.position
+-- FD: (ssn, code) -> Taken(student, course)
+-- FD: grade -> Taken.grade
+-- FD: (courseName, classificationName) -> Classified(course, classification)
+-- 
