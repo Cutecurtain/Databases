@@ -1,0 +1,58 @@
+Department(_name_,abr)
+
+Program(_name_,abr)
+
+Host(_departmentName_,_programName_)
+  departmentName_ -> Department.name_
+  programName_ -> Program.name_
+
+Branch(_name_,_programName_)
+  programName_ -> Program.name_
+
+Student(_ssn_,name,login,programName_)
+  programName_ -> Program.name_
+
+BelongsTo(_studentSsn_)
+  studentSsn_ -> Student.ssn_
+
+Course(_code_,name,credits,departmentName_)
+  departmentName_ -> Department.name_
+
+LimitedCourse(seats)
+
+LimitedCourse(_code_)
+  code_ -> Course.code_
+
+MandatoryProgram(_programName_,_courseCode_)
+  programName_ -> Program.name_
+  courseCode_ -> Course.code_
+
+MandatoryBranch(_branchName_,_branchProgramName_,_courseCode_)
+  (branchName_,branchProgramName_) -> Branch.(name_,programName_)
+  courseCode_ -> Course.code_
+
+RecommendedBranch(_branchName_,_branchProgramName_,_courseCode_)
+  (branchName_,branchProgramName_) -> Branch.(name_,programName_)
+  courseCode_ -> Course.code_
+
+Classification(_name_)
+
+Classified(_courseCode_,_classificationName_)
+  courseCode_ -> Course.code_
+  classificationName_ -> Classification.name_
+
+Registered(_studentSsn_,_courseCode_)
+  studentSsn_ -> Student.ssn_
+  courseCode_ -> Course.code_
+
+Taken(_studentSsn_,_courseCode_,grade)
+  studentSsn_ -> Student.ssn_
+  courseCode_ -> Course.code_
+
+WaitingList(_studentSsn_,_courseCode_,position)
+  studentSsn_ -> Student.ssn_
+  courseCode_ -> Course.code_
+
+Prerequisite(_courseCode_1,_courseCode_2)
+  courseCode_1 -> Course.code_
+  courseCode_2 -> Course.code_
