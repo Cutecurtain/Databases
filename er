@@ -1,4 +1,4 @@
-ENTITY Department : _name_ _abr_
+ENTITY Department : _name_ abr
 ENTITY Program : _name_ abr
 RELATIONSHIP Host Department -- Program
 
@@ -8,7 +8,7 @@ ENTITY Student : _ssn_ name login
 RELATIONSHIP StudentOf Student -) Program
 
 WEAK ENTITY BelongsTo Student InBranch
-RELATIONSHIP ToBranch BelongsTo -- Branch
+RELATIONSHIP ToBranch BelongsTo -) Branch
 
 ENTITY Course : _code_ name credits
 RELATIONSHIP CourseOf Course -) Department
@@ -24,12 +24,8 @@ RELATIONSHIP Classified Course -- Classification
 
 RELATIONSHIP Registered Student -- Course
 
-ENTITY Taken : grade
-RELATIONSHIP HasTaken Taken -- Student
-RELATIONSHIP TakenCourse Taken -- Course
+RELATIONSHIP Taken Student -- Course : grade
 
-ENTITY WaitingList : position
-RELATIONSHIP InLine WaitingList -- Student
-RELATIONSHIP ForCourse WaitingList -- Course
+RELATIONSHIP WaitingList Student -- Course : position
 
 RELATIONSHIP Prerequisite Course -- Course
