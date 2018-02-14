@@ -1,5 +1,6 @@
 FD SCHEMA
 Decomposed domain:
+
 Departments(_name_,abr)
 unique(abr)
 
@@ -30,17 +31,17 @@ waitingLine(_student_,_course_,position)
 references: student -> Student.ssn
 references: course -> Course.code
 
-taken(student,course,grade)
+taken(_student_,_course_,grade)
 references: student -> Student.ssn
 references: course -> Course.code
 
-classifications(classificationName)
+classifications(_classificationName_)
 
-courseClassification(classificationName, course)
+courseClassification(_classificationName_, _course_)
 references: classificationName -> classifications.classificationName
 references: course -> Course.code
 
-prerequisite(course, requiredCourse)
+prerequisite(_course_, _requiredCourse_)
 references: course -> Course.code
 references: requiredCourse -> Course.code
 

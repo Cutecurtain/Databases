@@ -14,7 +14,7 @@ Domain(
 	 	coursename,
 	 	credits,
 	 	seats,
-        prerequisite,
+        	prerequisite,
 	 	position,
 	 	grade,
  		_classificationName_
