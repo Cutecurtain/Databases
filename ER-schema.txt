@@ -12,8 +12,9 @@ Branch(_name_,_programName_)
 Student(_ssn_,name,login,programName_)
   programName_ -> Program.name_
 
-BelongsTo(_studentSsn_)
+BelongsTo(_studentSsn_,branchName_,branchProgramName_)
   studentSsn_ -> Student.ssn_
+  (branchName_,branchProgramName_) -> Branch(name_,programName_)
 
 Course(_code_,name,credits,departmentName_)
   departmentName_ -> Department.name_
