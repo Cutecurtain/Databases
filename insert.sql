@@ -74,6 +74,7 @@ INSERT INTO Taken VALUES('6', 'asdfgh', '3');
 INSERT INTO Taken VALUES('6', 'hojhoj', '3');
 INSERT INTO Taken VALUES('6', 'ABC123', '3');
 INSERT INTO Taken VALUES('6', 'DEF456', '3');
+INSERT INTO Taken VALUES('6', 'muumuu', '3');
 INSERT INTO Taken VALUES('6', 'miimii', '3');
 
 INSERT INTO Prerequisite VALUES('miimii', 'muumuu');
