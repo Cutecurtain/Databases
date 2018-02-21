@@ -24,10 +24,28 @@ CREATE TRIGGER Register
 		FOR EACH ROW EXECUTE PROCEDURE proccess_register();
 
 
-
 CREATE OR REPLACE FUNCTION proccess_unregister() RETURNS TRIGGER AS $proccess_unregister$
 	BEGIN
-		
+		IF(OLD.course IN (SELECT code from LimitedCourse)) THEN
+			IF(OLD.status = 'registered') THEN 
+				IF((SELECT COUNT(status) FROM Registrations WHERE status = 'registered' AND course = OLD.course) <= (SELECT seats FROM LimitedCourse WHERE code = OLD.course)) THEN
+					INSERT INTO Registered (student, course) SELECT student, course FROM WaitingList where position = 1 AND course = OLD.course; 
+					DELETE FROM WaitingList where position = 1 AND course = OLD.course;
+					UPDATE WaitingList
+					SET position = position - 1
+					WHERE course = OLD.course;
+				END IF;
+				DELETE FROM Registered where student = OLD.student;
+			ELSE
+				DELETE FROM WaitingList where position = 1 AND course = OLD.course;
+				UPDATE WaitingList
+				SET position = position - 1
+				WHERE course = OLD.course;
+			END IF;
+		ELSE
+			DELETE FROM Registered where student = OLD.student;
+		END IF;
+		RETURN NULL;
 	END;
 $proccess_unregister$ LANGUAGE plpgsql;
 
