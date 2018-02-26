@@ -34,7 +34,7 @@ CREATE OR REPLACE FUNCTION proccess_unregister() RETURNS TRIGGER AS $proccess_un
 					SET position = position - 1
 					WHERE course = OLD.course;
 				END IF;
-				DELETE FROM Registered where student = OLD.student;
+				DELETE FROM Registered where student = OLD.student AND course = OLD.course;
 			ELSE
 				DECLARE
 					oldPos INT := (SELECT position FROM WaitingList WHERE student = OLD.student AND course = OLD.course);
@@ -46,7 +46,7 @@ CREATE OR REPLACE FUNCTION proccess_unregister() RETURNS TRIGGER AS $proccess_un
 				END;
 			END IF;
 		ELSE
-			DELETE FROM Registered where student = OLD.student;
+			DELETE FROM Registered where student = OLD.student AND course = OLD.course;
 		END IF;
 		RETURN NULL;
 	END;

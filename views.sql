@@ -28,7 +28,6 @@ CREATE VIEW Registrations AS
 	(SELECT student,course,'registered' AS status
 	FROM Registered);
 
-
 --View: PassedCourses(student, course, credits) For all students, all passed 
 --courses, i.e. courses finished with a grade other than 'U', and the number 
 --of credits for those courses. This view is intended as a helper view towards
