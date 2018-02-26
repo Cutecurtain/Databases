@@ -7,8 +7,7 @@ WEAK ENTITY Branch Program BranchOf : _name_
 ENTITY Student : _ssn_ name login
 RELATIONSHIP StudentOf Student -) Program
 
-WEAK ENTITY BelongsTo Student InBranch
-RELATIONSHIP ToBranch BelongsTo -) Branch
+RELATIONSHIP BelongsTo Student -) Branch
 
 ENTITY Course : _code_ name credits
 RELATIONSHIP CourseOf Course -) Department
@@ -26,6 +25,6 @@ RELATIONSHIP Registered Student -- Course
 
 RELATIONSHIP Taken Student -- Course : grade
 
-RELATIONSHIP WaitingList Student -- Course : position
+RELATIONSHIP WaitingList Student -- LimitedCourse : position
 
 RELATIONSHIP Prerequisite Course -- Course
