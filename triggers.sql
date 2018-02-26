@@ -23,7 +23,6 @@ CREATE TRIGGER Register
 	INSTEAD OF INSERT ON Registrations
 		FOR EACH ROW EXECUTE PROCEDURE proccess_register();
 
-
 CREATE OR REPLACE FUNCTION proccess_unregister() RETURNS TRIGGER AS $proccess_unregister$
 	BEGIN
 		IF(OLD.course IN (SELECT code from LimitedCourse)) THEN
@@ -37,10 +36,14 @@ CREATE OR REPLACE FUNCTION proccess_unregister() RETURNS TRIGGER AS $proccess_un
 				END IF;
 				DELETE FROM Registered where student = OLD.student;
 			ELSE
-				DELETE FROM WaitingList where position = 1 AND course = OLD.course;
-				UPDATE WaitingList
-				SET position = position - 1
-				WHERE course = OLD.course;
+				DECLARE
+					oldPos INT := (SELECT position FROM WaitingList WHERE student = OLD.student AND course = OLD.course);
+				BEGIN
+					DELETE FROM WaitingList where student = OLD.student AND course = OLD.course;
+					UPDATE WaitingList
+					SET position = position - 1
+					WHERE course = OLD.course AND position > oldPos;
+				END;
 			END IF;
 		ELSE
 			DELETE FROM Registered where student = OLD.student;
