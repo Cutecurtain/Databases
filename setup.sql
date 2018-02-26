@@ -250,10 +250,10 @@ INSERT INTO Taken VALUES('6', 'miimii', '3');
 
 INSERT INTO Prerequisite VALUES('miimii', 'muumuu');
 
-INSERT INTO LimitedCourse VALUES('hojhoj', 4);
+INSERT INTO LimitedCourse VALUES('hojhoj', 3);
 INSERT INTO LimitedCourse VALUES('hajhaj', 3);
 
-INSERT INTO WaitingList VALUES('1', 'hojhoj', 1);
+INSERT INTO WaitingList VALUES('5', 'hojhoj', 1);
 INSERT INTO WaitingList VALUES('4', 'hajhaj', 1);
 INSERT INTO WaitingList VALUES('5', 'hajhaj', 2);
 
