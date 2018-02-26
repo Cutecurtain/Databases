@@ -175,7 +175,7 @@ CREATE VIEW PathToGraduation AS
 	WHERE ml.student = tc.student AND ml.student = mc.student AND ml.student = rc.student AND ml.student = sc.student AND ml.student = gs.student;
 
 --View: CourseQueuePositions(course,student,place)
-CREATE VIEW CourseQueuePosition AS
+CREATE VIEW CourseQueuePositions AS
 	SELECT course, student, position AS place
 	FROM WaitingList
 	GROUP BY course, student
