@@ -60,6 +60,12 @@ INSERT INTO Registered VALUES('2', 'DEF456');
 INSERT INTO Registered VALUES('3', 'asdfgh');
 INSERT INTO Registered VALUES('4', 'miimii');
 INSERT INTO Registered VALUES('5', 'ABC123');
+INSERT INTO Registered VALUES('3', 'hajhaj');
+INSERT INTO Registered VALUES('2', 'hajhaj');
+INSERT INTO Registered VALUES('1', 'hajhaj');
+INSERT INTO Registered VALUES('3', 'hojhoj');
+INSERT INTO Registered VALUES('2', 'hojhoj');
+INSERT INTO Registered VALUES('1', 'hojhoj');
 
 INSERT INTO Taken VALUES('1', 'ABC123', 'U');
 INSERT INTO Taken VALUES('2', 'ABC123', '3');
@@ -79,6 +85,9 @@ INSERT INTO Taken VALUES('6', 'miimii', '3');
 
 INSERT INTO Prerequisite VALUES('miimii', 'muumuu');
 
-INSERT INTO LimitedCourse VALUES('hojhoj', 1);
+INSERT INTO LimitedCourse VALUES('hojhoj', 4);
+INSERT INTO LimitedCourse VALUES('hajhaj', 3);
 
 INSERT INTO WaitingList VALUES('1', 'hojhoj', 1);
+INSERT INTO WaitingList VALUES('4', 'hajhaj', 1);
+INSERT INTO WaitingList VALUES('5', 'hajhaj', 2);
