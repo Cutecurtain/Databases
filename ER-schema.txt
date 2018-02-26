@@ -14,7 +14,7 @@ Student(_ssn_,name,login,programName_)
 
 BelongsTo(_studentSsn_,branchName_,branchProgramName_)
   studentSsn_ -> Student.ssn_
-  (branchName_,branchProgramName_) -> Branch(name_,programName_)
+  (branchName_,branchProgramName_) -> Branch.(name_,programName_)
 
 Course(_code_,name,credits,departmentName_)
   departmentName_ -> Department.name_
@@ -50,9 +50,9 @@ Taken(_studentSsn_,_courseCode_,grade)
   studentSsn_ -> Student.ssn_
   courseCode_ -> Course.code_
 
-WaitingList(_studentSsn_,_courseCode_,position)
+WaitingList(_studentSsn_,position)
   studentSsn_ -> Student.ssn_
-  courseCode_ -> Course.code_
+  () -> LimitedCourse.()
 
 Prerequisite(_courseCode_1,_courseCode_2)
   courseCode_1 -> Course.code_

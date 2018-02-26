@@ -30,10 +30,10 @@ Code is the only unique value of a course.
 A course can have zero or more classifications.
 Thus the only superkeys are: (code, classificationName, ssn or login).
 
-BCNF violations: every dependency below except the superkeys and the trivial cases.
+Step 1, identify all relations that doesnt violate BCNF, that is relations that are either trivial or superkeys:
 
 Functional dependencies:
-															BCNF:
+									                		BCNF:
 programDepartmentName		-> programDepartmentAbr									Trivial
 programDepartmentAbr		-> programDepartmentName								Trivial
 programName			-> (programAbr,programDepartmentName,mandatoryProgram)					
@@ -47,3 +47,7 @@ code				-> (coursename,credits,seats,prerequisite,classificationName,courseDepar
 (code,login)			-> (position,grade)									
 (ssn,code,classificationName)	-> "Everything"										Superkey
 (login,code,classificationName)	-> "Everything"										Superkey
+
+Step 2: we decide to use ssn, instead of login, as primary key for student
+
+Step 3: Follow the domain description closely. When making the FD-schema.
