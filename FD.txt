@@ -7,19 +7,19 @@ Domain(
 		mandatoryBranch,
 		mandatoryProgram,
 		recommendedBranch,
-	 	_ssn_,
+	 	ssn,
 	 	studentName,
 	 	login,
 		courseDepartmentName,
 		courseDepartmentAbr,
-	 	_code_,
+	 	code,
 	 	coursename,
 	 	credits,
 	 	seats,
         	prerequisite,
 	 	position,
 	 	grade,
- 		_classificationName_
+ 		classificationName
  )
 
 super keys: (ssn, code, classificationName), (login, code, classificationName)
