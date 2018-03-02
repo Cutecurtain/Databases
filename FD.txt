@@ -30,10 +30,11 @@ Code is the only unique value of a course.
 A course can have zero or more classifications.
 Thus the only superkeys are: (code, classificationName, ssn or login).
 
-Step 1, identify all relations that doesnt violate BCNF, that is relations that are either trivial or superkeys:
+Step 1, identify all relations that doesn't violate BCNF, that is relations that are either trivial or superkeys:
 
 Functional dependencies:
-									                		BCNF:
+															BCNF:
+															
 programDepartmentName		-> programDepartmentAbr									Trivial
 programDepartmentAbr		-> programDepartmentName								Trivial
 programName			-> (programAbr,programDepartmentName,mandatoryProgram)					
