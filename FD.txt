@@ -22,8 +22,6 @@ Domain(
  		classificationName
  )
 
-super keys: (ssn, code, classificationName), (login, code, classificationName)
-
 Both ssn and login is unique values of a student.
 Code is the only unique value of a course.
 A student can only have one relationship to a course (registered, taken, waiting list).
