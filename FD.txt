@@ -12,43 +12,43 @@ Domain(
 	 	login,
 		courseDepartmentName,
 		courseDepartmentAbr,
-	 	code,
-	 	coursename,
+	 	courseCode,
+	 	courseName,
 	 	credits,
 	 	seats,
         	prerequisite,
-	 	position,
+	 	queuePosition,
 	 	grade,
  		classificationName
  )
 
 super keys: (ssn, code, classificationName), (login, code, classificationName)
 
-A student can only have one relationship to a course.
 Both ssn and login is unique values of a student.
 Code is the only unique value of a course.
-A course can have zero or more classifications.
-Thus the only superkeys are: (code, classificationName, ssn or login).
+A student can only have one relationship to a course (registered, taken, waiting list).
+Thus the only superkey are: (code, ssn or login).
 
-Step 1, identify all relations that doesn't violate BCNF, that is relations that are either trivial or superkeys:
+Now we choose to use the student ssn as primary key for the student. And just keep login unique.
+We also choose that programs and courses that is part of a department only reference the department name instead of the abreviation.
+
+Identify all relations that doesn't violate BCNF, that is relations that are either trivial or superkeys:
 
 Functional dependencies:
 															BCNF:
 															
 programDepartmentName		-> programDepartmentAbr									Trivial
 programDepartmentAbr		-> programDepartmentName								Trivial
+
 programName			-> (programAbr,programDepartmentName,mandatoryProgram)					
+
 ssn				-> (studentName,login,programName,branchName)						
-login				-> (studentName,ssn,programName,branchName)						
+
 courseDepartmentName		-> courseDepartmentAbr									Trivial
 courseDepartmentAbr		-> courseDepartmentName									Trivial
-code				-> (coursename,credits,seats,prerequisite,classificationName,courseDepartmentName)	
+
+courseCode			-> (courseName,credits,seats,prerequisite,classificationName,courseDepartmentName)	
+
 (branchName,programName)	-> (mandatoryBranch,recommendedBranch)							
-(code,ssn)			-> (position,grade)									
-(code,login)			-> (position,grade)									
-(ssn,code,classificationName)	-> "Everything"										Superkey
-(login,code,classificationName)	-> "Everything"										Superkey
 
-Step 2: we decide to use ssn, instead of login, as primary key for student
-
-Step 3: Follow the domain description closely. When making the FD-schema.
+(ssn,courseCode)		-> "Everything"										Superkey
