@@ -22,10 +22,24 @@ Domain(
  		classificationName
  )
 
+Description:
+A student has the unique values ssn and login.
+A student belongs to a program.
+A student can only have one relation to a course.
+
+
+A course has the unique value courseCode.
+A course is part of a department.
+A course can have several classifications, prerequisites.
+A course can have a limited amount of seats.
+A course is part of a program.
+
+Superkey: (ssn or login, courseCode, mandatoryBranch, mandatoryProgram, recommendedBranch, prerequisite, classificationName)
+
 Both ssn and login is unique values of a student.
 Code is the only unique value of a course.
 A student can only have one relationship to a course (registered, taken, waiting list).
-Thus the only superkey are: (code, ssn or login).
+Thus the only key we want in order to reach all the information is: (code, ssn or login).
 
 Now we choose to use the student ssn as primary key for the student. And just keep login unique.
 We also choose that programs and courses that is part of a department only reference the department name instead of the abreviation.
