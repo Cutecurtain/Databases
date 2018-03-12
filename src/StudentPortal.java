@@ -104,7 +104,9 @@ public class StudentPortal {
         resultSets.add(prepareStatement(4, "SELECT name, course, FinishedCourses.credits, grade FROM FinishedCourses, Course WHERE student = ? AND code = course", conn, student));
         resultSets.add("Registered courses (name code status):");
         resultSets.add(prepareStatement(3, "SELECT name, course, status FROM Course, Registrations WHERE student = ? AND status = 'registered' AND code = course", conn, student));
-        resultSets.add(prepareStatement(4, "SELECT name, r.course, 'waiting as nr.' AS status, place FROM Course co, Registrations r, CourseQueuePositions c WHERE r.student = ? AND r.course = c.course AND r.course = code AND status = 'waiting'", conn, student));
+
+        resultSets.add(prepareStatement(4, "SELECT name, r.course, 'waiting as nr.' AS status, place FROM Course co, Registrations r, CourseQueuePositions c WHERE c.student = ? AND r.student = c.student AND r.course = c.course AND r.course = code AND status = 'waiting'", conn, student));
+
         resultSets.add("Seminar courses taken: " + prepareStatement(1,"SELECT seminarcourses FROM PathToGraduation WHERE student = ?",conn,student));
         resultSets.add("Math credits taken: " + prepareStatement(1,"SELECT mathcredits FROM PathToGraduation WHERE student = ?",conn,student));
         resultSets.add("Research credits taken: " + prepareStatement(1,"SELECT researchcredits FROM PathToGraduation WHERE student = ?",conn,student));
