@@ -9,7 +9,15 @@ CREATE OR REPLACE FUNCTION proccess_register() RETURNS TRIGGER AS $proccess_regi
 			RAISE EXCEPTION 'Student % does not have the required prerequisite(s) for the course %', NEW.student, NEW.course;
 		ELSE
 			IF ((SELECT code FROM LimitedCourse WHERE code = NEW.course) = NEW.course AND (SELECT COUNT(*) FROM Registered WHERE course = NEW.course) >= (SELECT seats FROM LimitedCourse WHERE code = NEW.course)) THEN
-					INSERT INTO WaitingList VALUES(NEW.student, NEW.course, (SELECT COUNT(*) FROM WaitingList WHERE course = NEW.course) + 1);
+			    DECLARE
+			      maxPos INT := (SELECT MAX(position) FROM WaitingList WHERE course = NEW.course);
+			    BEGIN
+            IF(maxPos IS NULL) THEN
+              INSERT INTO WaitingList VALUES(NEW.student, NEW.course,1);
+            ELSE
+              INSERT INTO WaitingList VALUES(NEW.student, NEW.course,maxPos + 1);
+            END IF;
+					END;
 			ELSE
 				INSERT INTO Registered VALUES(NEW.student, NEW.course);
 			END IF;
@@ -26,13 +34,15 @@ CREATE TRIGGER Register
 CREATE OR REPLACE FUNCTION proccess_unregister() RETURNS TRIGGER AS $proccess_unregister$
 	BEGIN
 		IF(OLD.course IN (SELECT code from LimitedCourse)) THEN
-			IF(OLD.status = 'registered') THEN 
+			IF(OLD.status = 'registered') THEN
 				IF((SELECT COUNT(status) FROM Registrations WHERE status = 'registered' AND course = OLD.course) <= (SELECT seats FROM LimitedCourse WHERE code = OLD.course)) THEN
 					DECLARE
 						firstStudent TEXT := (SELECT student FROM WaitingList WHERE course = OLD.course AND position = (SELECT min(position) FROM WaitingList WHERE course = OLD.course));
 					BEGIN
-						INSERT INTO Registered (firstStudent, OLD.course);
-						DELETE FROM WaitingList WHERE student = firstStudent AND course = OLD.course;
+					  IF (firstStudent IS NOT NULL) THEN
+						  INSERT INTO Registered VALUES(firstStudent, OLD.course);
+						  DELETE FROM WaitingList WHERE student = firstStudent AND course = OLD.course;
+						END IF;
 					END;
 				END IF;
 				DELETE FROM Registered WHERE student = OLD.student AND course = OLD.course;
