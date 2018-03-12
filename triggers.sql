@@ -28,25 +28,23 @@ CREATE OR REPLACE FUNCTION proccess_unregister() RETURNS TRIGGER AS $proccess_un
 		IF(OLD.course IN (SELECT code from LimitedCourse)) THEN
 			IF(OLD.status = 'registered') THEN 
 				IF((SELECT COUNT(status) FROM Registrations WHERE status = 'registered' AND course = OLD.course) <= (SELECT seats FROM LimitedCourse WHERE code = OLD.course)) THEN
-					INSERT INTO Registered (student, course) SELECT student, course FROM WaitingList where position = 1 AND course = OLD.course; 
-					DELETE FROM WaitingList where position = 1 AND course = OLD.course;
-					UPDATE WaitingList
-					SET position = position - 1
-					WHERE course = OLD.course;
+					DECLARE
+						firstStudent TEXT := (SELECT student FROM WaitingList WHERE course = OLD.course AND position = (SELECT min(position) FROM WaitingList WHERE course = OLD.course));
+					BEGIN
+						INSERT INTO Registered (firstStudent, OLD.course);
+						DELETE FROM WaitingList WHERE student = firstStudent AND course = OLD.course;
+					END;
 				END IF;
-				DELETE FROM Registered where student = OLD.student AND course = OLD.course;
+				DELETE FROM Registered WHERE student = OLD.student AND course = OLD.course;
 			ELSE
 				DECLARE
 					oldPos INT := (SELECT position FROM WaitingList WHERE student = OLD.student AND course = OLD.course);
 				BEGIN
-					DELETE FROM WaitingList where student = OLD.student AND course = OLD.course;
-					UPDATE WaitingList
-					SET position = position - 1
-					WHERE course = OLD.course AND position > oldPos;
+					DELETE FROM WaitingList WHERE student = OLD.student AND course = OLD.course;
 				END;
 			END IF;
 		ELSE
-			DELETE FROM Registered where student = OLD.student AND course = OLD.course;
+			DELETE FROM Registered WHERE student = OLD.student AND course = OLD.course;
 		END IF;
 		RETURN NULL;
 	END;
