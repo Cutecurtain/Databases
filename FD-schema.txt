@@ -1,4 +1,6 @@
 FD SCHEMA
+Step by step and explanation in FD.txt
+
 Decomposed domain:
 
 Departments(_name_,abr)
@@ -30,6 +32,7 @@ references: code -> Course.code
 waitingLine(_student_,_course_,position)
 references: student -> Student.ssn
 references: course -> Course.code
+unique(course,position)
 
 taken(_student_,_course_,grade)
 references: student -> Student.ssn

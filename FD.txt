@@ -1,66 +1,90 @@
 Domain(
-	 	programDepartmentName,
-	 	programDepartmentAbr,
-	 	programName,
-	 	programAbr,
-	 	branchName,
-		mandatoryBranch,
-		mandatoryProgram,
-		recommendedBranch,
-	 	ssn,
-	 	studentName,
-	 	login,
-		courseDepartmentName,
-		courseDepartmentAbr,
-	 	courseCode,
-	 	courseName,
-	 	credits,
-	 	seats,
-        	prerequisite,
-	 	queuePosition,
-	 	grade,
- 		classificationName
+	programDepartmentName,
+	programDepartmentAbr,
+	programName,
+	programAbr,
+	branchName,
+	mandatoryBranch,
+	mandatoryProgram,
+	recommendedBranch,
+	ssn,
+	studentName,
+	login,
+	courseDepartmentName,
+	courseDepartmentAbr,
+	courseCode,
+	courseName,
+	credits,
+	seats,
+        prerequisite,
+	queuePosition,
+	grade,
+	classificationName
  )
 
-Description:
+Description of domain table:
+------------------------------------------------------------------------------------------------------------------------------
+A program belong to a department.
+A branch belongs to a program.
+
 A student has the unique values ssn and login.
 A student belongs to a program.
-A student can only have one relation to a course.
-
+A student can belong to a branch.
+A student may only have one of three relation to a course: waiting in line, registered, taken.
 
 A course has the unique value courseCode.
 A course is part of a department.
-A course can have several classifications, prerequisites.
+A course can have several classifications and / or prerequisites.
 A course can have a limited amount of seats.
-A course is part of a program.
 
+Following these rules we see that we get a rather tedious superkey:
 Superkey: (ssn or login, courseCode, mandatoryBranch, mandatoryProgram, recommendedBranch, prerequisite, classificationName)
 
+------------------------------------------------------------------------------------------------------------------------------
+
+
+BCNF DECOMPOSITION:
+------------------------------------------------------------------------------------------------------------------------------
+So what we want to do, since the student only can have one relation to a course, is to make sure we only need one of the
+student's unique values and the course's code to find out exaclty what and reduce the amount of excess data in the database.
+
+Here's what we want:
+--------------------
 Both ssn and login is unique values of a student.
 Code is the only unique value of a course.
-A student can only have one relationship to a course (registered, taken, waiting list).
+A student can only have one relationship to a course (waiting in line, registered, taken).
 Thus the only key we want in order to reach all the information is: (code, ssn or login).
 
 Now we choose to use the student ssn as primary key for the student. And just keep login unique.
-We also choose that programs and courses that is part of a department only reference the department name instead of the abreviation.
+We also choose that programs and courses that is part of a department only reference the department name instead of the
+abreviation.
+--------------------
 
-Identify all relations that doesn't violate BCNF, that is relations that are either trivial or superkeys:
+Identify all functional dependencies by following the domain description step by step. Then check if they violate BCNF; if they are neither trivial nor superkeys.
 
 Functional dependencies:
-															BCNF:
+																BCNF:
 															
-programDepartmentName		-> programDepartmentAbr									Trivial
-programDepartmentAbr		-> programDepartmentName								Trivial
+programDepartmentName		-> programDepartmentAbr										Trivial
+programDepartmentAbr		-> programDepartmentName									Trivial
 
-programName			-> (programAbr,programDepartmentName,mandatoryProgram)					
+programName			-> (programAbr, programDepartmentName, mandatoryProgram)					
 
-ssn				-> (studentName,login,programName,branchName)						
+ssn				-> (studentName, login, programName, branchName)						
+login				-> (studentName, ssn, programName, branchName)
 
-courseDepartmentName		-> courseDepartmentAbr									Trivial
-courseDepartmentAbr		-> courseDepartmentName									Trivial
+courseDepartmentName		-> courseDepartmentAbr										Trivial
+courseDepartmentAbr		-> courseDepartmentName										Trivial
 
-courseCode			-> (courseName,credits,seats,prerequisite,classificationName,courseDepartmentName)	
+courseCode			-> (courseName, credits, seats, prerequisites, classificationName, courseDepartmentName)	
 
-(branchName,programName)	-> (mandatoryBranch,recommendedBranch)							
+(branchName, programName)	-> (mandatoryBranch, recommendedBranch)							
 
-(ssn,courseCode)		-> "Everything"										Superkey
+(ssn, courseCode)		-> (queuePosition, grade)
+
+(courseCode, queuePosition)	-> ssn
+
+(ssn, courseCode, mandatoryBranch, mandatoryProgram, recommendedBranch, prerequisite, classificationName)			Superkey
+
+
+--------------------
