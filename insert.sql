@@ -1,4 +1,4 @@
-﻿INSERT INTO Program VALUES('Informationsteknik', 'TKITE');
+INSERT INTO Program VALUES('Informationsteknik', 'TKITE');
 INSERT INTO Program VALUES('Datateknik', 'TKDE');
 INSERT INTO Program VALUES('ALLA ANDRA', 'NOOB');
 
@@ -71,6 +71,7 @@ INSERT INTO Taken VALUES('1', 'ABC123', 'U');
 INSERT INTO Taken VALUES('2', 'ABC123', '3');
 INSERT INTO Taken VALUES('3', 'ABC123', '4');
 INSERT INTO Taken VALUES('4', 'ABC123', '5');
+INSERT INTO Taken VALUES('4', 'muumuu', '3');
 
 INSERT INTO Taken VALUES('2', 'DEF456', '3');
 INSERT INTO Taken VALUES('2', 'asdfgh', '4');
@@ -85,7 +86,7 @@ INSERT INTO Taken VALUES('6', 'miimii', '3');
 
 INSERT INTO Prerequisite VALUES('miimii', 'muumuu');
 
-INSERT INTO LimitedCourse VALUES('hojhoj', 4);
+INSERT INTO LimitedCourse VALUES('hojhoj', 3);
 INSERT INTO LimitedCourse VALUES('hajhaj', 3);
 
 INSERT INTO WaitingList VALUES('1', 'hojhoj', 1);

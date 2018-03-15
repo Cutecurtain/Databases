@@ -158,6 +158,6 @@ CREATE TABLE WaitingList (
 	course			CHAR(6)		REFERENCES LimitedCourse(code),
 	position		INT			NOT NULL,
 	PRIMARY KEY(student, course),
-	UNIQUE(position, course),
+	CONSTRAINT posCourse UNIQUE(position, course),
 	CHECK(position > 0)
 );

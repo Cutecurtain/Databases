@@ -175,7 +175,5 @@ CREATE VIEW PathToGraduation AS
 
 --View: CourseQueuePositions(course,student,place)
 CREATE VIEW CourseQueuePositions AS
-	SELECT course, student, position AS place
-	FROM WaitingList
-	GROUP BY course, student
-	ORDER BY place;
+	SELECT course, student, DENSE_RANK() OVER (PARTITION BY course ORDER BY position) AS place
+	FROM WaitingList;
